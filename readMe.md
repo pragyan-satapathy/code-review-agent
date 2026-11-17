@@ -26,9 +26,15 @@
 
 ## How it works
 
-- The CLI sends the diff to an OpenAI model and checks finding locations before printing them.
-- For local diffs, the model can read a few lines from changed files. For PRs, it reviews the diff only.
+- I built the CLI in Python with the OpenAI SDK and Responses API. It uses `gpt-6.1-sol` by default and `httpx` to fetch PR diffs. I did not use an agent framework.
+- For local diffs, the model can call `read_file` to inspect a few lines from changed files. The CLI checks the request and sends the result back to the model. For PRs, it reviews the diff only.
+- The model returns structured JSON. The CLI checks finding locations against changed lines before printing them.
 - Set `OPENAI_MODEL` or pass `--model` to use another model.
+
+## What went wrong
+
+- I first tested tool calling with mocked model responses because I had no API key.
+- Fetching a PR with Python's built-in HTTP client failed certificate validation on my Mac. I switched to `httpx` and verified a live public PR review.
 
 ## What I would do next
 
